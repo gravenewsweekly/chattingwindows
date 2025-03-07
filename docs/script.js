@@ -1,19 +1,25 @@
-const db = firebase.database().ref("messages");
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const messagesRef = ref(database, "messages");
 
 // Send Message
-function sendMessage() {
-    const message = document.getElementById("message").value;
-    if (message.trim() !== "") {
-        db.push().set({
-            text: message,
-            timestamp: Date.now()
-        });
-        document.getElementById("message").value = "";
+window.sendMessage = function () {
+    const messageInput = document.getElementById("message");
+    const messageText = messageInput.value.trim();
+
+    if (messageText !== "") {
+        push(messagesRef, { text: messageText, timestamp: Date.now() });
+        messageInput.value = "";
     }
-}
+};
 
 // Display Messages
-db.on("child_added", function(snapshot) {
+onChildAdded(messagesRef, (snapshot) => {
     const msg = snapshot.val();
     const msgElement = document.createElement("p");
     msgElement.innerText = msg.text;
