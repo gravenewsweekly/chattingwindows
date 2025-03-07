@@ -30,6 +30,14 @@ body {
     text-decoration: none;
 }
 
+#chat-box {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid black;
+    padding: 10px;
+    background: white;
+}
+
 footer {
     text-align: center;
     margin-top: 20px;
